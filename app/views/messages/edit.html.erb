@@ -1,15 +1,17 @@
 <h1>Editing message</h1>
 
-<%= render "form", message: @message %>
-<br>
-<%= form_tag ai_generate_message_path(@message), method: :post, class: 'relative' do %>
-
-  <div>
-    <input name="ai_message" type="text" />
-  </div>
-  <div>
-    <button type="submit" >Send </button>
-  </div>
+<%= turbo_frame_tag "message_#{@message.id}" do %>
+  <%= render "messages/form", message: @message %>
+  <br>
+  <%= form_tag ai_generate_message_path(@message), method: :post, class: 'relative', data: { turbo: "true", turbo_frame: "message_#{@message.id}" } do %>
+    <div>
+      <input name="ai_message" type="text" />
+    </div>
+    <%= render 'messages/ai_message', temp_name: nil, message:@message %>
+    <div>
+      <button type="submit">Send</button>
+    </div>
+  <% end %>
 <% end %>
 
 <div>

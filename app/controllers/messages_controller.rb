@@ -17,12 +17,15 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
+    @temp_name = nil 
   end
 
   def ai_generate
     @message
-    data = {message: @message, ai_message: params[:ai_message]}
-    DefaultJob.perform_async(data.to_json)
+    DefaultJob.perform_async('send_ai', {message_id: @message.id, name: @message.name, ai_message: params[:ai_message]}.to_json)
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
   # POST /messages or /messages.json
   def create
