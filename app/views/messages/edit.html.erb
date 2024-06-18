@@ -1,5 +1,6 @@
-<h1>Editing message</h1>
+<%= turbo_stream_from ["message_channel", @message] %>
 
+<h1>Editing message</h1>
 <%= turbo_frame_tag "message_#{@message.id}" do %>
   <%= render "messages/form", message: @message %>
   <br>

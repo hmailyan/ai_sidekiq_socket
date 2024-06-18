@@ -17,10 +17,10 @@ class DefaultJob
     message.name = final_message
 
     Turbo::StreamsChannel.broadcast_replace_to(
-      "messages",
+      ["message_channel", message],
       target: "message_#{message.id}",
-      partial: "messages/ai_message",
-      locals: { message: message, temp_name: final_message }
+      partial: "messages/form",
+      locals: { message: message }
     )
 
 
