@@ -1,0 +1,8 @@
+
+<% if chat_info.present? %>
+    <% chat_info.each do |single| %>
+        <div>
+            <%= single[:content] %>
+        </div>
+    <% end %>
+<% end %>

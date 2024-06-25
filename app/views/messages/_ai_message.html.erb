@@ -1,0 +1,28 @@
+<div id="choices-container">
+  <%= form_tag ai_chat_message_path(@message), method: :post, class: 'relative', data: { turbo: "true", turbo_frame: "message_#{@message.id}" } do %>
+    
+    <% if json.present? %>
+      <% json[:messages]&.each do |message| %>
+        <div class="message">
+          <p><%= message[:text] %></p>
+          <% if message[:type] == "multiple_choice" %>
+            <ul>
+              <% message[:answers].each do |answer| %>
+                <li><%= answer[:text] %></li>
+              <% end %>
+            </ul>
+          <% elsif message[:type] == "contact_input" %>
+            <input type="text" placeholder="Your contact data" />
+            <button><%= message[:answers].first[:text] %></button>
+          <% elsif message[:type] == "text_only" %>
+            <!-- Just display the message text -->
+          <% end %>
+        </div>
+      <% end %>
+
+    <% else %>
+      <button>go</button>
+    <% end %>
+    
+  <% end %>
+</div>

@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  before_action :set_message, only: %i[ show edit update destroy ai_generate ]
+  before_action :set_message, only: %i[ show edit update destroy ai_generate ai_chat ]
 
   # GET /messages or /messages.json
   def index
@@ -27,6 +27,14 @@ class MessagesController < ApplicationController
       format.turbo_stream
     end
   end
+
+  def ai_chat
+    # Enqueue the background worker
+    DefaultJob.perform_async('chat_ai', { input: params[:input], message_id: @message.id, name: @message.name }.to_json)
+    respond_to do |format|
+      format.turbo_stream
+    end
+  end
   # POST /messages or /messages.json
   def create
     @message = Message.new(message_params)
@@ -40,6 +48,18 @@ class MessagesController < ApplicationController
         format.json { render json: @message.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def chat
+    @chat_info = []
+    @chat_uuid = SecureRandom.uuid
+  end
+
+  def answer
+    p chat_params
+    p 2222222222
+    @chat_info = chat_params[:chat_info].present? ? JSON.parse(chat_params[:chat_info]) : [] 
+    DefaultJob.perform_async('chat_ai', { chat_info: @chat_info, text: chat_params[:text]}.to_json)
   end
 
   # PATCH/PUT /messages/1 or /messages/1.json
@@ -69,6 +89,10 @@ class MessagesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_message
       @message = Message.find(params[:id])
+    end
+
+    def chat_params
+      params.permit(:text,:chat_info)
     end
 
     # Only allow a list of trusted parameters through.

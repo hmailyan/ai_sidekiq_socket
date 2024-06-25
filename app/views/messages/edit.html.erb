@@ -8,12 +8,12 @@
     <div>
       <input name="ai_message" type="text" />
     </div>
-    <%= render 'messages/ai_message', temp_name: nil, message:@message %>
     <div>
       <button type="submit">Send</button>
     </div>
   <% end %>
 <% end %>
+  <%= render 'messages/ai_message', json: {}, message:@message %>
 
 <div>
   <%= link_to "Show this message", @message %> |

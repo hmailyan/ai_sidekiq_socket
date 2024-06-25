@@ -1,0 +1,15 @@
+<%= turbo_stream_from ["chat_channel", 2] %>
+<div>
+  <%= turbo_frame_tag "chat" do %>
+  <%= render partial: 'chat_cart', locals: { chat_info: @chat_info } %>
+  <% end %>
+
+  <%= form_with url: answer_path, method: :post, class: 'relative' do |form| %>
+    <input type="text" name="chat_info" input="<%= @chat_info.to_json%>" hidden>
+    <%= form.label :text, "Your Answer" %>
+    <%= form.text_field :text%>
+
+    <%= form.submit %>
+
+  <% end%>
+</div>
