@@ -1,8 +1,64 @@
-
-<% if chat_info.present? %>
-    <% chat_info.each do |single| %>
-        <div>
-            <%= single[:content] %>
+<div class="flex flex-col items-center justify-center w-screen min-h-96 bg-gray-100 text-gray-800 ">
+    <div class="flex flex-col flex-grow w-full max-w-xl bg-white shadow-xl rounded-lg overflow-hidden">
+    <% if chat_info.present? %>
+        <% chat_info.each do |single| %>
+        
+            <% if single[:role] == 'system' %>
+                <div class="flex flex-col flex-grow h-full p-4 overflow-auto">
+                    <div class="flex w-full mt-2 space-x-3 max-w-xs" >
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full"></div>
+                        <div class="flex items-start gap-2.5">
+                        <div class="flex flex-col gap-1 w-full max-w-[320px]">
+                            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                            </div>
+                            <div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-indigo-100 rounded-e-xl rounded-es-xl">
+                                <p class="text-sm font-normal text-gray-900 dark:text-white"> Hi I am your assistent by get leads for Yoga</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            <% else %>
+                <div class="flex flex-col flex-grow h-full p-4 overflow-auto">
+                    <div class="flex w-full mt-2 space-x-3 max-w-xs" style="<%= single[:role] == 'user' ? 'justify-content: end' : ''%>">
+                        <div class="flex-shrink-0 h-10 w-10 rounded-full"></div>
+                        <div class="flex items-start gap-2.5">
+                        <div class="flex flex-col gap-1 w-full max-w-[320px]">
+                            <div class="flex flex-col leading-1.5 p-4 border-gray-200 <%= single[:role] == 'user' ? 'bg-gray-100' : 'bg-indigo-100'%> rounded-e-xl rounded-es-xl">
+                                <p class="text-sm font-normal text-gray-900 dark:text-white"> <%= single[:content] %></p>
+                            </div>                      
+                            <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
+        <% end %>
+    <% else %>  
+        <div class="flex flex-col flex-grow h-full p-4 overflow-auto">
+        <div class="flex w-full mt-2 space-x-3 max-w-xs" >
+            <div class="flex-shrink-0 h-10 w-10 rounded-full"></div>
+            <div class="flex items-start gap-2.5">
+            <div class="flex flex-col gap-1 w-full max-w-[320px]">
+                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                </div>
+                <div class="flex flex-col leading-1.5 p-4 border-gray-200 bg-indigo-100 rounded-e-xl rounded-es-xl">
+                <p class="text-sm font-normal text-gray-900 dark:text-white"> Hi I am your assistent by get leads for Yoga</p>
+                </div>
+            </div>
+            </div>
+        </div>
         </div>
     <% end %>
+    </div>
+</div>
+<%= form_with url: answer_path, method: :post, class: 'flex flex-col items-center w-screen bg-gray-100 text-gray-800 ' do |form| %>
+        <input type="text" name="chat_info" value="<%= chat_info.to_json%>" hidden>
+        <input type="text" name="chat_uuid" value="<%= chat_uuid %>" hidden>
+        <div class="bg-gray-100 p-4 flex  flex-grow w-full max-w-xl justify-around">
+            <input class="flex items-center h-10 rounded-lg px-3 text-sm" type="text" name="text" placeholder="Type your message…">
+        <%= form.submit class: 'rounded-md w-20 h-10 bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600' %>
+        </div>
+
 <% end %>

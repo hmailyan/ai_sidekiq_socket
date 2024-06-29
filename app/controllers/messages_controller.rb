@@ -17,7 +17,7 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
-    @temp_name = nil 
+    @temp_name = nil
   end
 
   def ai_generate
@@ -57,9 +57,9 @@ class MessagesController < ApplicationController
 
   def answer
     p chat_params
-    p 2222222222
-    @chat_info = chat_params[:chat_info].present? ? JSON.parse(chat_params[:chat_info]) : [] 
-    DefaultJob.perform_async('chat_ai', { chat_info: @chat_info, text: chat_params[:text]}.to_json)
+    p '1111111111111111111111111'
+    @chat_info = chat_params[:chat_info].present? ? JSON.parse(chat_params[:chat_info]) : []
+    DefaultJob.perform_async('chat_ai', { chat_info: @chat_info, text: chat_params[:text], chat_uuid: chat_params[:chat_uuid]}.to_json)
   end
 
   # PATCH/PUT /messages/1 or /messages/1.json
@@ -92,7 +92,7 @@ class MessagesController < ApplicationController
     end
 
     def chat_params
-      params.permit(:text,:chat_info)
+      params.permit(:text,:chat_info, :chat_uuid)
     end
 
     # Only allow a list of trusted parameters through.

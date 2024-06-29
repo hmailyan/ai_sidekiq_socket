@@ -4,7 +4,6 @@ class DefaultJob
   def perform(job,options = {})
     p "START"
     p job
-    p options
     options = JSON.parse(options,:symbolize_names => true)
 
     case job
@@ -26,16 +25,17 @@ class DefaultJob
       )
     when 'chat_ai'
       p 'chat_ai'
-
+      p 111111111111111111111
       openai_service = OpenaiService.new
+      p options[:text]
       chat_info = openai_service.generate_json(options).map(&:deep_symbolize_keys)
-      p chat_info
-      
+      # p chat_info
+      p options[:chat_uuid]
       Turbo::StreamsChannel.broadcast_replace_to(
-        ["chat_channel", 2],
+        "chat_channel_#{options[:chat_uuid]}",
         target: "chat",
         partial: "messages/chat_cart",
-        locals: { chat_info: chat_info }
+        locals: { chat_info: chat_info, chat_uuid: options[:chat_uuid] }
       )
     end
 

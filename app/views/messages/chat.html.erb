@@ -1,15 +1,21 @@
-<%= turbo_stream_from ["chat_channel", 2] %>
-<div>
-  <%= turbo_frame_tag "chat" do %>
-  <%= render partial: 'chat_cart', locals: { chat_info: @chat_info } %>
-  <% end %>
+<header >
+  <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+    <div class="flex lg:flex-1">
+      <a href="#" class="-m-1.5 p-1.5">
+        <span class="sr-only">Your Company</span>
+        <img class="h-14 w-auto rounded-full" src="https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg" alt="">
+      </a>
+    </div>
+    <div class=" lg:flex lg:gap-x-12 text-sm font-semibold leading-6 text-black">
+      Emilia
+    </div>
+  </nav>
+  <!-- Mobile menu, show/hide based on menu open state. -->
 
-  <%= form_with url: answer_path, method: :post, class: 'relative' do |form| %>
-    <input type="text" name="chat_info" input="<%= @chat_info.to_json%>" hidden>
-    <%= form.label :text, "Your Answer" %>
-    <%= form.text_field :text%>
+</header>
 
-    <%= form.submit %>
-
-  <% end%>
+<%= turbo_stream_from "chat_channel_#{@chat_uuid}" %>
+<div id="chat">
+  <%= render partial: 'messages/chat_cart', locals: { chat_info: @chat_info, chat_uuid: @chat_uuid } %>
 </div>
+

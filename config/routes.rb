@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   resources :messages do
     member do
@@ -5,6 +7,8 @@ Rails.application.routes.draw do
       post :ai_chat
     end
   end
+
+  mount Sidekiq::Web => '/sidekiq'
 
   get "chat" => "messages#chat"
   post "answer" => "messages#answer"
